@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather Info</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .card {
+      display: none;
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    .card img {
+      width: 64px;
+    }
+
+    .loading {
+      font-size: 18px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌤 Weather Info</h1>
+
+  <!-- Spinner -->
+  <div id="loading" class="loading">Loading weather data...</div>
+
+  <!-- Weather Card -->
+  <div class="card" id="weatherCard">
+    <h2 id="cityName"></h2>
+    <img id="weatherIcon" alt="Weather Icon" />
+    <div><strong id="temperature"></strong></div>
+    <div id="conditionText"></div>
+  </div>
+
+  <script src="WeatherApi.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Public Holiday Checker</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    select, ul {
+      margin-top: 20px;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📅 Public Holiday Checker</h1>
+  <label for="countrySelect">Select Country:</label>
+  <select id="countrySelect">
+    <option value="PK">🇵🇰 Pakistan</option>
+    <option value="US">🇺🇸 United States</option>
+    <option value="IN">🇮🇳 India</option>
+    <option value="GB">🇬🇧 UK</option>
+    <option value="SA">🇸🇦 Saudi Arabia</option>
+    <!-- Add more as needed -->
+  </select>
+
+  <ul id="holidayList"></ul>
+
+  <script>
+    const select = document.getElementById("countrySelect");
+    const holidayList = document.getElementById("holidayList");
+    function fetchHolidays(countryCode) {
+      const url = `https://date.nager.at/api/v3/PublicHolidays/2024/${countryCode}`;
+      holidayList.innerHTML = `<li>Loading...</li>`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          holidayList.innerHTML = "";
+          if (Array.isArray(data)) {
+            data.forEach(holiday => {
+              const li = document.createElement("li");
+              li.textContent = `${holiday.date} - ${holiday.localName}`;
+              holidayList.appendChild(li);
+            });
+          } else {
+            holidayList.innerHTML = `<li>No data found.</li>`;
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching holidays:", err);
+          holidayList.innerHTML = `<li>Error loading holidays.</li>`;
+        });
+    }
+    fetchHolidays(select.value);
+
+    select.addEventListener("change", () => {
+      fetchHolidays(select.value);
+    });
+  </script>
+
+</body>
+</html>

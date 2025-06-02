@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Todo List from API</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 10px;
+    }
+    .todo {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+    .completed {
+      background-color: #1e5f3c;
+      text-decoration: line-through;
+    }
+    .incomplete {
+      background-color: #5a1e1e;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #0a96d4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📝 Todo List</h2>
+  <button id="toggleButton">Show Only Completed</button>
+  <div id="todoList"></div>
+
+  <script>
+    const todoList = document.getElementById("todoList");
+    const toggleButton = document.getElementById("toggleButton");
+
+    let allTodos = [];
+    let showOnlyCompleted = false;
+
+    // Fetch todos
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then(res => res.json())
+      .then(data => {
+        allTodos = data.slice(0, 30); // show first 30 only
+        renderTodos();
+      });
+
+    // Render todos (filter if needed)
+    function renderTodos() {
+      todoList.innerHTML = "";
+      const todosToShow = showOnlyCompleted
+        ? allTodos.filter(todo => todo.completed)
+        : allTodos;
+
+      todosToShow.forEach(todo => {
+        const div = document.createElement("div");
+        div.className = `todo ${todo.completed ? "completed" : "incomplete"}`;
+        div.textContent = todo.title;
+        todoList.appendChild(div);
+      });
+
+      toggleButton.textContent = showOnlyCompleted
+        ? "Show All"
+        : "Show Only Completed";
+    }
+
+    toggleButton.addEventListener("click", () => {
+      showOnlyCompleted = !showOnlyCompleted;
+      renderTodos();
+    });
+  </script>
+
+</body>
+</html>

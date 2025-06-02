@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagination Practice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: white;
+      padding: 20px;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      max-height: 150px;
+      object-fit: contain;
+    }
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .pagination button {
+      padding: 8px 12px;
+      margin: 0 5px;
+      border: none;
+      background-color: #444;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pagination button.active {
+      background-color: #0a96d4;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🛒 Fake Store - Paginated Products</h2>
+  <div class="products" id="productContainer"></div>
+  <div class="pagination" id="paginationButtons"></div>
+
+  <script>
+    const container = document.getElementById("productContainer");
+    const pagination = document.getElementById("paginationButtons");
+    const itemsPerPage = 6;
+    let currentPage = 1;
+    let products = [];
+
+    fetch("https://fakestoreapi.com/products")
+      .then(res => res.json())
+      .then(data => {
+        products = data;
+        renderPage(currentPage);
+        renderPaginationButtons();
+      });
+
+    function renderPage(page) {
+      container.innerHTML = "";
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentItems = products.slice(start, end);
+
+      currentItems.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${product.image}" alt="${product.title}" />
+          <h4>${product.title}</h4>
+          <p><strong>$${product.price}</strong></p>
+        `;
+        container.appendChild(card);
+      });
+
+      // Highlight active page
+      const buttons = pagination.querySelectorAll("button");
+      buttons.forEach(btn => btn.classList.remove("active"));
+      const activeBtn = pagination.querySelector(`button[data-page="${page}"]`);
+      if (activeBtn) activeBtn.classList.add("active");
+    }
+
+    function renderPaginationButtons() {
+      const totalPages = Math.ceil(products.length / itemsPerPage);
+      pagination.innerHTML = "";
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.setAttribute("data-page", i);
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderPage(currentPage);
+        });
+        pagination.appendChild(btn);
+      }
+    }
+  </script>
+
+</body>
+</html>

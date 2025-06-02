@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quote Generator</title>
+</head>
+<body style="background-color: black; color: white;">
+  <h1>Quote Generator</h1>
+
+  <div id="QuoteDiv" class="quote" style="display: none;">
+    <h2 id="mainQuote"></h2>
+    <p id="authorName"></p>
+    <button id="newQuote">New Quote</button>
+  </div>
+
+  <script>
+    const quoteDiv = document.getElementById("QuoteDiv");
+    const mainQuote = document.getElementById("mainQuote");
+    const authorName = document.getElementById("authorName");
+    const newQuoteBtn = document.getElementById("newQuote");
+
+    // Function to fetch and show quote
+    function fetchQuote() {
+      fetch("https://api.quotable.io/random")
+        .then(res => res.json())
+        .then(data => {
+          mainQuote.textContent = `"${data.content}"`;
+          authorName.textContent = `- ${data.author}`;
+          quoteDiv.style.display = "block";
+        })
+        .catch(error => {
+          mainQuote.textContent = "Failed to fetch quote.";
+          authorName.textContent = "";
+          quoteDiv.style.display = "block";
+          console.error("Error fetching quote:", error);
+        });
+    }
+
+    // Initial quote on page load
+    fetchQuote();
+
+    // Load new quote on button click
+    newQuoteBtn.addEventListener("click", fetchQuote);
+  </script>
+</body>
+</html>

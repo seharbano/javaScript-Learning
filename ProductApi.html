@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .card {
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  </style>
+</head>
+
+<body style="background-color: black; color: white;">
+  <h1>🛒 Product API</h1>
+
+  <div id="loading">Loading...</div>
+
+  <!-- 📦 Cards Wrapper -->
+  <div class="cards-container" id="productContainer"></div>
+
+  <!-- 🧩 Template Card (hidden initially) -->
+  <div class="card" id="cardTemplate" style="display: none;">
+    <img id="productImage" src="" alt="Product Image" width="100">
+    <h2 class="titleName"></h2>
+    <p class="price"></p>
+    <p class="description"></p>
+  </div>
+  <!-- <script>
+
+const loading = document.getElementById("loading");
+const productContainer = document.getElementById("productContainer");
+const cardTemplate = document.getElementById("cardTemplate");
+fetch("https://fakestoreapi.com/products")
+  .then(res => res.json())
+  .then(products => {
+    // Hide loader
+    loading.style.display = "none";
+
+    products.forEach(product => {
+      // Clone card
+      const card = cardTemplate.cloneNode(true);
+      card.style.display = "block";
+
+      // Set data
+      card.querySelector(".titleName").textContent = product.title;
+      card.querySelector(".price").textContent = `$${product.price}`;
+      card.querySelector(".description").textContent = product.description;
+      card.querySelector("img").src = product.image;
+      // Add to container
+      productContainer.appendChild(card);
+    });
+  })
+  .catch(err => {
+    loading.textContent = "❌ Failed to load products.";
+    console.error("API Error:", err);
+  });
+    // const loading = document.getElementById("loading");
+    // const title = document.getElementById("titleName");
+    // const price = document.getElementById("price");
+    // const description = document.getElementById("description");
+    // fetch("https://fakestoreapi.com/products")
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     const product = data[0];
+    //     console.log(product);
+    //     title.textContent = product.title;
+    //     price.textContent = `$${product.price}`;
+    //     description.textContent = product.description;
+    //     card.style.display = "block";
+    //   })
+    //   .catch(err => {
+    //     console.error("API Error:", err);
+    //   })
+  </script> -->
+<script>
+  const loading = document.getElementById("loading");
+const productContainer = document.getElementById("productContainer");
+const cardTemplate = document.getElementById("cardTemplate");
+
+fetch("https://fakestoreapi.com/products")
+  .then(res => res.json())
+  .then(products => {
+    // Hide loader
+    loading.style.display = "none";
+
+    // Use map to clone and populate cards
+    const cards = products.map(product => {
+      const card = cardTemplate.cloneNode(true);
+      card.style.display = "block";
+
+      card.querySelector("img").src = product.image;
+      card.querySelector("img").alt = product.title;
+      card.querySelector(".titleName").textContent = product.title;
+      card.querySelector(".price").textContent = `$${product.price}`;
+      card.querySelector(".description").textContent = product.description;
+
+      return card;
+    });
+
+    // Append all cards to container
+    cards.forEach(card => productContainer.appendChild(card));
+  })
+  .catch(err => {
+    loading.textContent = "❌ Failed to load products.";
+    console.error("API Error:", err);
+  });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Country Flags & Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      padding: 20px;
+    }
+    select {
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .countries {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #444;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      max-height: 100px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    h3 {
+      margin: 10px 0 5px;
+    }
+    p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🌍 Country Explorer</h2>
+
+  <label for="regionSelect">Filter by Region:</label><br />
+  <select id="regionSelect">
+    <option value="All">🌐 All</option>
+    <option value="Asia">🌏 Asia</option>
+    <option value="Europe">🌍 Europe</option>
+    <option value="Africa">🌍 Africa</option>
+    <option value="Americas">🌎 Americas</option>
+    <option value="Oceania">🌊 Oceania</option>
+  </select>
+
+  <div class="countries" id="countryContainer"></div>
+
+  <script>
+    const countryContainer = document.getElementById("countryContainer");
+    const regionSelect = document.getElementById("regionSelect");
+    let allCountries = [];
+
+    fetch("https://restcountries.com/v3.1/all")
+      .then(res => res.json())
+      .then(data => {
+        allCountries = data;
+        displayCountries(allCountries);
+      });
+
+    regionSelect.addEventListener("change", () => {
+      const region = regionSelect.value;
+      const filtered = region === "All"
+        ? allCountries
+        : allCountries.filter(c => c.region === region);
+      displayCountries(filtered);
+    });
+
+    function displayCountries(countries) {
+      countryContainer.innerHTML = "";
+      countries.forEach(country => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const currencyObj = country.currencies 
+          ? Object.values(country.currencies)[0]
+          : { name: "N/A" };
+
+        card.innerHTML = `
+          <img src="${country.flags.png}" alt="Flag of ${country.name.common}" />
+          <h3>${country.name.common}</h3>
+          <p>🏛 Capital: ${country.capital ? country.capital[0] : "N/A"}</p>
+          <p>💰 Currency: ${currencyObj.name}</p>
+          <p>👨‍👩‍👧‍👦 Population: ${country.population.toLocaleString()}</p>
+        `;
+        countryContainer.appendChild(card);
+      });
+    }
+  </script>
+
+</body>
+</html>

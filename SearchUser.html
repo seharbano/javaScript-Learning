@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GitHub User Finder</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+    }
+    button {
+      padding: 10px;
+      margin-left: 10px;
+    }
+    #userCard {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #444;
+      border-radius: 10px;
+      max-width: 300px;
+    }
+    img {
+      width: 100px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔍 GitHub User Search</h2>
+  <input type="text" id="usernameInput" placeholder="Enter GitHub username" />
+  <button onclick="searchUser()">Search</button>
+
+  <div id="userCard"></div>
+
+  <script>
+    const userCard = document.getElementById("userCard");
+
+    function searchUser() {
+      const username = document.getElementById("usernameInput").value.trim();
+      if (!username) {
+        userCard.innerHTML = "<p>Please enter a username.</p>";
+        return;
+      }
+
+      const url = `https://api.github.com/users/${username}`;
+      userCard.innerHTML = "<p>Loading...</p>";
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("User not found");
+          }
+          return res.json();
+        })
+        .then(data => {
+          userCard.innerHTML = `
+            <img src="${data.avatar_url}" alt="Avatar" />
+            <h3>${data.login}</h3>
+            <p><a href="${data.html_url}" target="_blank" style="color: #4fc3f7;">View Profile</a></p>
+          `;
+        })
+        .catch(err => {
+          userCard.innerHTML = `<p style="color:red;">❌ ${err.message}</p>`;
+        });
+    }
+  </script>
+
+</body>
+</html>
