@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Currency Converter</title>
+</head>
+<body style="background-color: black; color: white;">
+  <div id="container">
+    <label>Amount:</label><br />
+    <input type="number" id="amount" value="1" /><br />
+
+    <h1>Currency Rate</h1>
+
+    <select id="conversionSelect">
+      <option value="USD-PKR">USD → PKR</option>
+    </select>
+
+    <p id="rateParagraph"></p>
+  </div>
+
+  <script>
+    const amountInput = document.getElementById("amount");
+    const select = document.getElementById("conversionSelect");
+    const rateParagraph = document.getElementById("rateParagraph");
+
+    async function convertCurrency() {
+      const [from, to] = select.value.split("-");
+      const amount = parseFloat(amountInput.value);
+
+      rateParagraph.textContent = "Converting...";
+
+      try {
+        const res = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+        const data = await res.json();
+
+        const rate = data.rates[to];
+        const converted = (amount * rate).toFixed(2);
+
+        rateParagraph.innerHTML = `
+          💰 ${amount} ${from} = <strong>${converted} ${to}</strong><br>
+          💡 1 ${from} = ${rate} ${to}
+        `;
+      } catch (err) {
+        rateParagraph.textContent = "❌ Failed to fetch exchange rate.";
+        console.error(err);
+      }
+    }
+
+    amountInput.addEventListener("input", convertCurrency);
+    select.addEventListener("change", convertCurrency);
+
+    convertCurrency(); 
+  </script>
+</body>
+</html>

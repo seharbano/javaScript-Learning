@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black; color: white;">
+    <div class="userContainer">
+
+    </div>
+  <script>
+    fetch("https://fakestoreapi.com/products/1")
+    .then(res => res.json())
+  .then(data => {
+    const container = document.querySelector(".userContainer");
+
+    const card = document.createElement("div");
+    card.style = "border: 1px solid gray; border-radius: 10px; padding: 10px; width: 250px; margin: 10px;";
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${data.image}" alt="User Image" style="border-radius: 10px; width: 150px;" />
+      <div class="title">${data.title}</div>
+      <div class="price">$${data.price}</div>
+      <div class="description">${data.description}</div>
+    `;
+
+    container.innerHTML = "";
+    container.appendChild(card);
+  })
+  .catch(err => {
+    console.log("Error fetching user", err);
+  });
+
+  </script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Card</title>
+</head>
+<body style="background-color: black; color: white;">
+  <h1>Product Card</h1>
+  <div id="loading">Loading...</div>
+  <div class="cards-container" id="productContainer"></div>
+  <div id="cardDiv" style="display: none; padding: 20px; width: 220px; border: 1px solid gray; border-radius: 20px;">
+    <img src="" alt="product" id="imag" style="width: 100%; height: 200px; object-fit: contain;" />
+    <p id="title"></p>
+    <p id="price"></p>
+    <p id="description"></p>
+  </div>
+
+  <script>
+    const loading = document.getElementById("loading");
+    const productContainer = document.getElementById("productContainer");
+    const cardTemplate = document.getElementById("cardDiv");
+
+    fetch("https://fakestoreapi.com/products/1")
+      .then(res => res.json())
+      .then(data => {
+        loading.style.display = "none";
+
+        const card = cardTemplate.cloneNode(true);
+        card.style.display = "block";
+
+        card.querySelector("#imag").src = data.image;
+        card.querySelector("#imag").alt = data.title;
+        card.querySelector("#title").textContent = data.title;
+        card.querySelector("#price").textContent = `$${data.price}`;
+        card.querySelector("#description").textContent = data.description;
+
+        productContainer.appendChild(card);
+      })
+      .catch(err => {
+        loading.textContent = "❌ Failed to load product.";
+        console.error("API Error:", err);
+      });
+  </script>
+</body>
+</html> -->

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body style="background-color: black; color: white;">
+  <div class="userContainer">
+    <div class="card" style="display: none;
+         border: 1px solid gray; border-radius: 10px; padding: 10px; width: 280px; margin: 20px; ">
+      <img id="flag" src="" alt="Flag" style="border-radius: 10px; width: 100%; height: 150px; object-fit: contain;" />
+      <div class="title"><strong>Country:</strong> <span id="countryName"></span></div>
+      <div class="capital"><strong>Capital:</strong> <span id="capital"></span></div>
+      <div class="population"><strong>Population:</strong> <span id="population"></span></div>
+    </div>
+  </div>
+  <script>
+    fetch("https://restcountries.com/v3.1/name/pakistan")
+      .then(res => res.json())
+      .then(data => {
+        const country = data[0];
+  
+        const card = document.querySelector(".card");
+        const flag = card.querySelector("#flag");
+        const name = card.querySelector("#countryName");
+        const capital = card.querySelector("#capital");
+        const population = card.querySelector("#population");
+  
+        flag.src = country.flags.png;
+        flag.alt = `Flag of ${country.name.common}`;
+        name.textContent = country.name.common;
+        capital.textContent = country.capital[0];
+        population.textContent = country.population.toLocaleString();
+  
+        card.style.display = "block";
+      })
+      .catch(err => {
+        console.log("Error fetching country info", err);
+      });
+  </script>
+  
+</body>
+</html>
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pakistan Info</title>
+</head>
+<body style="background-color: black; color: white;">
+  <div class="userContainer"></div>
+
+  <script>
+    fetch("https://restcountries.com/v3.1/name/pakistan")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.querySelector(".userContainer");
+        const country = data[0]; 
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style = `
+          border: 1px solid gray;
+          border-radius: 10px;
+          padding: 10px;
+          width: 280px;
+          margin: 20px;
+          background-color: #1a1a1a;
+        `;
+
+        card.innerHTML = `
+          <img src="${country.flags.png}" alt="Flag of Pakistan" style="border-radius: 10px; width: 100%; height: 150px; object-fit: contain;" />
+          <div class="title"><strong>Country:</strong> Pakistan</div>
+          <div class="capital"><strong>Capital:</strong> ${country.capital[0]}</div>
+          <div class="population"><strong>Population:</strong> ${country.population.toLocaleString()}</div>
+        `;
+
+        container.innerHTML = ""; 
+        container.appendChild(card);
+      })
+      .catch(err => {
+        console.log("Error fetching country info", err);
+      });
+  </script>
+</body>
+</html> -->
