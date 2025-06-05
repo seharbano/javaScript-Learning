@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black;color: white;">
+    <div id="mainDiv" style="border: 1px solid #e8e2e2;padding: 10px;width: 250px;border-radius: 5px;">
+<img src="" alt="" id="BreedImg" style="height: 300px;width: 250px;border-radius: 5px;"/>
+<p id="myStatus"></p>
+    </div>
+    <script>
+        const productImg = document.getElementById("BreedImg");
+        const title = document.getElementById("myStatus");
+        const API_Url = fetch("https://dog.ceo/api/breeds/image/random")
+      .then(res=>res.json())
+      .then(data=>{
+       productImg.src = data.message;
+       title.innerHTML = data.status;
+      })
+      .catch(error=>{
+        console.log(error,"fail request");
+      })
+    </script>
+</body>
+</html>

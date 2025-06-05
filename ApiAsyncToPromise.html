@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body style="background-color: black;color: white;">
+  <h1>Async to Promise</h1>
+  <script>
+    const p1 = new Promise((resolve, rejeccted) => {
+      setTimeout(() => {
+        resolve("Promise resolve !!!")
+      }, 20000);
+    });
+    const p2 = new Promise((resolve, rejeccted) => {
+      setTimeout(() => {
+        resolve("Promise resolve  value!!!")
+      }, 10000);
+    })
+    async function handlePromise() {
+      console.log("JS is Jrogrammimng Language");
+      const val = await p1;
+      console.log("Hayee js");
+      console.log(val);
+      
+      const val2 = await p2;
+      console.log("Hayee js 2");
+      console.log(val2);
+    }
+handlePromise();
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black;color: white;">
+    <h1>Async to Promise</h1>
+    <script>
+        fetch("https://fakestoreapi.com/products/1")
+  .then(res => res.json())
+  .then(data => {
+    console.log("Product title:", data.title);
+  })
+  .catch(err => {
+    console.log("Error:", err);
+  });
+  async function getData() {
+    try {
+        const res = await fetch("https://fakestoreapi.com/products/1");
+        const data = await res.json();
+        console.log(data.title);
+    } catch (error) {
+        console.log("Error:", error);   
+    }
+  }
+  getData()
+    </script>
+</body>
+</html> -->

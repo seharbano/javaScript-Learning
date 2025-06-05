@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .card {
+            border: 1px solid gray;
+            border-radius: 10px;
+            padding: 10px;
+            width: 350px;
+            margin: 20px auto;
+        }
+
+        #productImg {
+            height: 150px;
+            width: 150px;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #title,
+        #updatedDate {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .info-row p {
+            margin: 0;
+        }
+
+        .info-row img {
+            height: 50px;
+            width: 50px;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        #reloaodProducts {
+            background-color: chocolate;
+            color: white;
+            padding: 10px 20px;
+            border: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <img src="" alt="product" id="productImg" />
+        <p id="title"></p>
+        <p id="updatedDate"></p>
+
+        <div class="info-row">
+            <p>Category Image:</p>
+            <img src="" alt="category" id="categoryImg" />
+        </div>
+
+        <div class="info-row">
+            <p>Sub-Category Image:</p>
+            <img src="" alt="subcategory" id="subCategoryImg" />
+        </div>
+
+        <button id="reloaodProducts">Click On it</button>
+    </div>
+
+    <script>
+        const title = document.getElementById("title");
+        const updatedDat = document.getElementById("updatedDate");
+        const imageProduct = document.getElementById("productImg");
+        const categoryImgs = document.getElementById("categoryImg");
+        const subCategoryImgs = document.getElementById("subCategoryImg");
+        const reloadButton = document.getElementById("reloaodProducts");
+        const url = fetch(`https://dentistry99-a5904c057644.herokuapp.com/products?approved=true`);
+
+        async function fetchProducts() {
+            try {
+                const data = await url;
+                const res = await data.json();
+                const resultData = res.data
+                console.log(resultData);
+
+                function showRandomProduct() {
+                    const randomIndex = Math.floor(Math.random() * resultData.length);
+                    console.log(randomIndex);
+                    const product = resultData[randomIndex];
+                    imageProduct.src = product.images;
+                    title.textContent = product.title;
+                    updatedDat.textContent = new Date(product.updatedAt).toLocaleString();
+                    categoryImgs.src = product.subCategory?.image || "";
+                    subCategoryImgs.src = product.subCategory?.category?.image || "";
+                }
+                showRandomProduct();
+                reloadButton.addEventListener("click", showRandomProduct);
+
+            } catch (error) {
+                console.log(error, "error");
+            }
+        }
+
+        fetchProducts();
+    </script>
+</body>
+
+</html>

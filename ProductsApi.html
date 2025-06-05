@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="background-color: black; color: white;">
+    <div class="card" id="cardTemplate" style="border:1px solid gray;border-radius: 10px; width: 150px;padding: 10px;display: none;">
+        <img src="" alt="product" id="subCategory" style="height: 150px; width: 150px;border-radius: 10px;">
+        <img src="" alt="product" id="productImg" style="height: 150px; width: 150px;border-radius: 10px;">
+        <p id="title" style="text-align: center;"></p>
+    </div>
+    <div class="cards-container" id="productContainer" style="display: flex;flex-wrap: wrap;gap:20px"></div>
+    <script>
+        const title = document.getElementById("title");
+        const imageProduct = document.getElementById("productImg");
+        const subCategorys = document.getElementById("subCategory");
+        const cardTemplate = document.getElementById("cardTemplate");
+        const productContainer = document.getElementById("productContainer");
+        const url = fetch("https://dentistry99-a5904c057644.herokuapp.com/products?approved=${true}")
+        async function getProduct() {
+            try {
+                const data = await url;
+                const res = await data.json();
+                // imageProduct.src = res.data[0].images; 
+                // title.innerHTML = res.data[0].title;
+
+                const allProducts = res.data.map(product => {
+
+                    const card = cardTemplate.cloneNode(true);
+                    card.style.display = "block";
+
+
+                    subCategorys.src = product.subCategory.image;
+                    imageProduct.src = product.images;
+                    imageProduct.alt = product.title;
+                    title.textContent = product.title;
+
+                    productContainer.appendChild(card);
+                });
+                console.log(res.data[0]);
+            } catch (error) {
+                console.log(error, "error");
+            }
+        }
+        getProduct()
+    </script>
+</body>
+
+</html>
